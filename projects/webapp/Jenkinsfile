@@ -68,9 +68,6 @@ pipeline {
     }
 
     post {
-        #always {
-           # sh 'docker logout || true'
-        #}
         success { echo "CI Passed" }
         failure { echo "CI Failed" }
     }
