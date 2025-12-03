@@ -1,7 +1,8 @@
+
 pipeline {
     agent {
         docker {
-            image 'docker:latest'
+            image 'docker:28.5.1' 
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
@@ -11,8 +12,18 @@ pipeline {
         IMAGE_NAME = "testapp3"
         IMAGE_TAG = "latest"
     }
-       
     stages {
+        stage('Install Python & Dependencies') {
+            agent {
+                docker {
+                    image 'python:3.9'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+           
+        }
+
+       
         stage('Build Docker Image') {
             steps {
                 sh """
@@ -52,4 +63,5 @@ pipeline {
         failure { echo "CI Failed" }
     }
 }
+
 
