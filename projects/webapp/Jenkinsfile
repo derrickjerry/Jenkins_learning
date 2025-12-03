@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout https://github.com/derrickjerry/Jenkins_learning.git
+                checkout scm
             }
         }
         stage('Build Docker Image') {
