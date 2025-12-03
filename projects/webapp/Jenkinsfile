@@ -15,9 +15,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh """
-                    cd projects/webapp
                     echo "Building Docker Image..."
-                    docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG .
+                    docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG -f projects/webapp/Dockerfile projects/webapp
                 """
             }
         }
