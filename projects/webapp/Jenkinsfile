@@ -12,6 +12,11 @@ pipeline {
         IMAGE_TAG = "latest"
     }
     stages {
+        stage('Checkout') {
+            steps {
+                checkout https://github.com/derrickjerry/Jenkins_learning.git
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 sh """
