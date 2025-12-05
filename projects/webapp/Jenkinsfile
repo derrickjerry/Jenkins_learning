@@ -1,8 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'docker:28.5.1' 
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
+            image 'docker:29.0-cli'
+            args '--privileged -v /var/run/docker.sock:/var/run/docker.sock --user root'
         }
     }
 
@@ -12,32 +12,25 @@ pipeline {
         IMAGE_TAG = "latest"
     }
     stages {
+<<<<<<< HEAD
         stage('Install Python & Dependencies') {
             agent {
                 docker {
                     image 'python:3.9'
                 }
             }
+=======
+        stage('Checkout') {
+>>>>>>> afc03d5c44853f1d00f1e6fbbb849b576bed53d2
             steps {
-                sh """
-                    echo "Installing dependencies..."
-                    pip install --upgrade pip
-                    if [ -f requirements.txt ]; then
-                        pip install -r requirements.txt
-                    else
-                        echo "No requirements.txt found"
-                    fi
-                """
+                checkout scm
             }
         }
-
-       
-
         stage('Build Docker Image') {
             steps {
                 sh """
                     echo "Building Docker Image..."
-                    docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG .
+                    docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG -f projects/webapp/Dockerfile projects/webapp
                 """
             }
         }
@@ -49,9 +42,9 @@ pipeline {
                     usernameVariable: 'USER',
                     passwordVariable: 'PASS'
                 )]) {
-                    sh """
+                    sh '''
                         echo $PASS | docker login -u $USER --password-stdin
-                    """
+                    '''
                 }
             }
         }
@@ -71,4 +64,3 @@ pipeline {
         failure { echo "CI Failed" }
     }
 }
-
